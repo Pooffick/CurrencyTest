@@ -1,0 +1,117 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - currency-test-network
+
+  db-migrator:
+    build:
+      context: .
+      dockerfile: DatabaseMigrator/Dockerfile
+    container_name: db-migrator
+    environment:
+      DOTNET_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+    networks:
+      - currency-test-network
+
+  currency-updater:
+    build:
+      context: .
+      dockerfile: CurrencyUpdater/Dockerfile
+    container_name: currency-updater
+    environment:
+      DOTNET_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      UpdateIntervalMinutes: ${CURRENCY_UPDATE_INTERVAL_MINUTES}
+    depends_on:
+      db-migrator:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    networks:
+      - currency-test-network
+
+  user-service:
+    build:
+      context: .
+      dockerfile: UserService/Dockerfile
+    container_name: user-service
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      DOTNET_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
+      Jwt__Secret: ${JWT_SECRET}
+      Jwt__ExpiresInMinutes: ${JWT_EXPIRES_IN_MINUTES}
+    depends_on:
+      db-migrator:
+        condition: service_completed_successfully
+    expose:
+      - "8080"
+    restart: unless-stopped
+    networks:
+      - currency-test-network
+
+  finance-service:
+    build:
+      context: .
+      dockerfile: FinanceService/Dockerfile
+    container_name: finance-service
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      DOTNET_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
+      Jwt__Secret: ${JWT_SECRET}
+    depends_on:
+      db-migrator:
+        condition: service_completed_successfully
+    expose:
+      - "8080"
+    restart: unless-stopped
+    networks:
+      - currency-test-network
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+    container_name: api-gateway
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      DOTNET_ENVIRONMENT: Development
+    ports:
+      - "5000:8080"
+    depends_on:
+      - user-service
+      - finance-service
+    restart: unless-stopped
+    networks:
+      - currency-test-network
+
+volumes:
+  postgres_data:
+
+networks:
+  currency-test-network:
+    driver: bridge
