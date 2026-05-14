@@ -1,12 +1,12 @@
 ﻿using System.Globalization;
 using System.Xml;
-using CurrencyTest.Database;
-using CurrencyTest.Database.Models;
+using CurrencyUpdater.Models;
+using CurrencyUpdater.Services.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace CurrencyUpdater.Services.Implementation
 {
-    public class CbrCurrencyService(HttpClient httpClient, DatabaseContext dbContext) : ICurrencyService
+    public class CbrCurrencyService(HttpClient httpClient, CurrencyDbContext dbContext) : ICurrencyService
     {
         private const string CbrUrl = "http://www.cbr.ru/scripts/XML_daily.asp";
         private static readonly CultureInfo RussianCulture = new("ru-RU");

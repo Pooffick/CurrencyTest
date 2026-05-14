@@ -1,15 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-CurrencyUpdater-d7edaf3f-5048-43f5-b49f-76e36c8b78f6</UserSecretsId>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>3a68f347-d2c2-4189-99e5-e4105abd43d7</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.27" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.27">
       <PrivateAssets>all</PrivateAssets>
@@ -17,4 +17,9 @@
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\CurrencyTest.Database\CurrencyTest.Database.csproj" />
+  </ItemGroup>
+
 </Project>
