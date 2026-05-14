@@ -9,19 +9,12 @@ namespace UserService.Api.Controllers
 {
     [ApiController]
     [Route("api/auth")]
-    public class AuthController : ControllerBase
+    public class AuthController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public AuthController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         [HttpPost("register")]
         public async Task<ActionResult<AuthResponse>> Register(RegisterUserRequest request, CancellationToken ct)
         {
-            var result = await _mediator.Send(
+            var result = await mediator.Send(
                 new RegisterUserCommand(request.Name, request.Password), ct);
             return Ok(result);
         }
@@ -29,7 +22,7 @@ namespace UserService.Api.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponse>> Login(LoginUserRequest request, CancellationToken ct)
         {
-            var result = await _mediator.Send(
+            var result = await mediator.Send(
                 new LoginUserCommand(request.Name, request.Password), ct);
             return Ok(result);
         }
@@ -38,7 +31,7 @@ namespace UserService.Api.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> Logout(CancellationToken ct)
         {
-            await _mediator.Send(new LogoutUserCommand(), ct);
+            await mediator.Send(new LogoutUserCommand(), ct);
             return Ok();
         }
     }
