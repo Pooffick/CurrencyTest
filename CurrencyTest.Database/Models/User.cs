@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CurrencyTest.Database.Models
 {
-    [Table("currency")]
-    public class Currency
+    [Table("user")]
+    public class User
     {
         [Key]
         [Column("id")]
@@ -15,7 +15,7 @@ namespace CurrencyTest.Database.Models
         public required string Name { get; set; }
 
         [Required]
-        [Column("rate")]
-        public required decimal Rate { get; set; }
+        [Column("password_hash")]
+        public required string PasswordHash { get; set; }
     }
 }

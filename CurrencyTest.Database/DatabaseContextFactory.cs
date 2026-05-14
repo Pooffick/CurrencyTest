@@ -8,6 +8,7 @@ namespace CurrencyTest.Database
         public DatabaseContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
+            optionsBuilder.UseNpgsql("");
 
             return new DatabaseContext(optionsBuilder.Options);
         }
