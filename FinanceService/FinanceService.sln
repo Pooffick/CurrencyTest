@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceService.Application"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceService.Infrastructure", "FinanceService.Infrastructure\FinanceService.Infrastructure.csproj", "{517B2CEF-82C9-40ED-BB54-C5B41115FE53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceService.Tests", "FinanceService.Tests\FinanceService.Tests.csproj", "{2E818122-5B5B-4319-97A8-0FC59C3D7C3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{517B2CEF-82C9-40ED-BB54-C5B41115FE53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{517B2CEF-82C9-40ED-BB54-C5B41115FE53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{517B2CEF-82C9-40ED-BB54-C5B41115FE53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E818122-5B5B-4319-97A8-0FC59C3D7C3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E818122-5B5B-4319-97A8-0FC59C3D7C3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E818122-5B5B-4319-97A8-0FC59C3D7C3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E818122-5B5B-4319-97A8-0FC59C3D7C3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
